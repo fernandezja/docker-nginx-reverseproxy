@@ -16,6 +16,38 @@ services:
       - webnet
 
 
+  starwarsapp2:
+    image: starwarsapp
+    build:
+      context: src/app
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3002:3000
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
+    networks:
+      - webnet
+
+
+  starwarsapp3:
+    image: starwarsapp
+    build:
+      context: src/app
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3003:3000
+      - 9230:9230
+    command: ["node", "--inspect=0.0.0.0:9230", "index.js"]
+    networks:
+      - webnet
+
+  
+
+
   reverseproxy:
     image: starwarsreverseproxy
     build:
@@ -25,8 +57,12 @@ services:
       - 80:80
     links:
       - starwarsapp1:starwarsapp1
+      - starwarsapp2:starwarsapp2
+      - starwarsapp3:starwarsapp3
     depends_on:
       - starwarsapp1
+      - starwarsapp2
+      - starwarsapp3
     networks:
       - webnet
 
